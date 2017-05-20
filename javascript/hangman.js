@@ -8,6 +8,7 @@ var words = [
     "ostrich"
 ]
 var word = words[Math.floor(Math.random() * words.length)] //"floor" rounds down, "ceiling" rounds up
+console.log(word);
 var answerArray = [];
 for (var i=0; i<word.length; i++) {
     answerArray[i] = "_"
@@ -17,25 +18,19 @@ var remainingGueses = 10;
 //set remaining letters to word length
 var remainingLetters =  word.length;
 
-// while word has not been guessed and still have guesses
-while (remainingLetters > 0 && remainingGueses > 0) {
-    // show progress
-    alert(answerArray.join(" "));
-    // prompt guess
-    var guess = prompt("Guess a letter, or click cancel to stop playing");
+// grab the contrainer to put the current guess state
+var userGuess = document.getElementById("currentState");
 
-    // if the player wants to quit
-    if (guess == null) {
-        // Quit
-        break;
-    // else if the guess is not a single letter
-    } else if (guess.length != 1) {
+function gameLoop() {
+    // while word has not been guessed and still have guesses
+    // prompt guess
+    var guess = document.getElementById("userGuess").value;
+
+    if (guess.length != 1) {
         // tell player to pick a single letter
         alert("Please enter a single letter");
     } else {
         var correctGuess = false;
-        // lower the number of guesses left
-        remainingGueses--;
         // if the guess is in the word,
         // update progress
         for (var i = 0; i < word.length; i++) {
@@ -49,12 +44,15 @@ while (remainingLetters > 0 && remainingGueses > 0) {
             remainingGueses--;
         }
     }
+    // show progress
+    userGuess.textContent = answerArray.join(" ");
+    // clear field
+    document.getElementById("userGuess").value = "";
+    // if the player has used all guesses
+    if (remainingLetters === 0) {
+        alert("Good job!!! The word was "+word);
+    } else if (remainingGueses === 0) {
+        alert("Sorry, you lost. Better luck next time!");
+    }
 }
 
-// if the player has used all guesses
-if (remainingLetters > 0) {
-    // game over
-    alert("Sorry, you lost. Better luck next time!");
-} else {
-    alert("Good job!!! The word was "+word);
-}
